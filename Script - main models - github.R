@@ -101,10 +101,17 @@ for (bin in levels(d$rt_bin)) {
   }
   
   model_formula <- if (bin == "40–60") {
-    deltaf ~ group + sex + (1 | participant / mu_id_intensity)
+    deltaf ~ group + sex +  (1 | participant / mu_id_intensity)
   } else {
-    deltaf ~ group * intensity + sex + (1 | participant / mu_id_intensity)
+    deltaf ~ group * intensity + sex +  (1 | participant / mu_id_intensity)
   }
+
+## Exploratory model adjusted by age    
+#  model_formula <- if (bin == "40–60") {
+#    deltaf ~ group + sex + scale(age) +  (1 | participant / mu_id_intensity)
+#  } else {
+#    deltaf ~ group * intensity + sex + scale(age) + (1 | participant / mu_id_intensity)
+#  }
   
   emm_options(lmerTest.limit = 15000)
   fit <- rlmer(model_formula, data = d_bin)
@@ -463,6 +470,9 @@ final_plot_deltaf <- plot_grid(
 
 # Save
 ggsave("final_plot_deltaf.png", plot = final_plot_deltaf, width = 12, height = 19, dpi = 300)
+ggsave("final_plot_deltaf.eps", plot = final_plot_deltaf, width = 12, height = 19, device = "eps")
+ggsave("final_plot_deltaf.eps", plot = final_plot_deltaf, width = 12, height = 19, device = cairo_ps)
+
 
 
 ################
